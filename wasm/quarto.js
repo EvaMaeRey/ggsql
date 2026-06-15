@@ -21535,8 +21535,8 @@ var init_languageBracketsConfiguration = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/common/languages/languageConfigurationRegistry.js
-function computeConfig(languageId, registry, configurationService, languageService) {
-  let languageConfig = registry.getLanguageConfiguration(languageId);
+function computeConfig(languageId, registry2, configurationService, languageService) {
+  let languageConfig = registry2.getLanguageConfiguration(languageId);
   if (!languageConfig) {
     if (!languageService.isRegisteredLanguageId(languageId)) {
       return new ResolvedLanguageConfiguration(languageId, {});
@@ -92271,7 +92271,7 @@ var init_iconRegistry = __esm({
       IconContribution: "base.contributions.icons"
     };
     (function(IconContribution2) {
-      function getDefinition(contribution, registry) {
+      function getDefinition(contribution, registry2) {
         let definition3 = contribution.defaults;
         while (ThemeIcon.isThemeIcon(definition3)) {
           const c3 = iconRegistry.getIcon(definition3.id);
@@ -107810,7 +107810,7 @@ var init_types2 = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/codeAction/browser/codeAction.js
-async function getCodeActions(registry, model, rangeOrSelection, trigger, progress, token) {
+async function getCodeActions(registry2, model, rangeOrSelection, trigger, progress, token) {
   const filter3 = trigger.filter || {};
   const notebookFilter = {
     ...filter3,
@@ -107822,7 +107822,7 @@ async function getCodeActions(registry, model, rangeOrSelection, trigger, progre
   };
   const cts = new TextModelCancellationTokenSource(model, token);
   const excludeNotebookCodeActions = trigger.type === 2;
-  const providers = getCodeActionProviders(registry, model, excludeNotebookCodeActions ? notebookFilter : filter3);
+  const providers = getCodeActionProviders(registry2, model, excludeNotebookCodeActions ? notebookFilter : filter3);
   const disposables = new DisposableStore();
   const promises = providers.map(async (provider) => {
     const handle = setTimeout(() => progress.report(provider), 1250);
@@ -107851,8 +107851,8 @@ async function getCodeActions(registry, model, rangeOrSelection, trigger, progre
       clearTimeout(handle);
     }
   });
-  const listener2 = registry.onDidChange(() => {
-    const newProviders = registry.all(model);
+  const listener2 = registry2.onDidChange(() => {
+    const newProviders = registry2.all(model);
     if (!equals2(newProviders, providers)) {
       cts.cancel();
     }
@@ -107862,7 +107862,7 @@ async function getCodeActions(registry, model, rangeOrSelection, trigger, progre
     const allActions = actions.map((x5) => x5.actions).flat();
     const allDocumentation = [
       ...coalesce(actions.map((x5) => x5.documentation)),
-      ...getAdditionalDocumentationForShowingActions(registry, model, trigger, allActions)
+      ...getAdditionalDocumentationForShowingActions(registry2, model, trigger, allActions)
     ];
     const managedCodeActionSet = new ManagedCodeActionSet(allActions, allDocumentation, disposables);
     disposables.add(managedCodeActionSet);
@@ -107875,17 +107875,17 @@ async function getCodeActions(registry, model, rangeOrSelection, trigger, progre
     cts.dispose();
   }
 }
-function getCodeActionProviders(registry, model, filter3) {
-  return registry.all(model).filter((provider) => {
+function getCodeActionProviders(registry2, model, filter3) {
+  return registry2.all(model).filter((provider) => {
     if (!provider.providedCodeActionKinds) {
       return true;
     }
     return provider.providedCodeActionKinds.some((kind) => mayIncludeActionsOfKind(filter3, new HierarchicalKind(kind)));
   });
 }
-function* getAdditionalDocumentationForShowingActions(registry, model, trigger, actionsToShow) {
+function* getAdditionalDocumentationForShowingActions(registry2, model, trigger, actionsToShow) {
   if (model && actionsToShow.length) {
-    for (const provider of registry.all(model)) {
+    for (const provider of registry2.all(model)) {
       if (provider._getAdditionalMenuItems) {
         yield* provider._getAdditionalMenuItems?.({ trigger: trigger.type, only: trigger.filter?.include?.value }, actionsToShow.map((item) => item.action));
       }
@@ -109864,8 +109864,8 @@ var init_codeActionContributions = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/codelens/browser/codelens.js
-async function getCodeLensModel(registry, model, token) {
-  const provider = registry.ordered(model);
+async function getCodeLensModel(registry2, model, token) {
+  const provider = registry2.ordered(model);
   const providerRanks = /* @__PURE__ */ new Map();
   const result = new CodeLensModel();
   const promises = provider.map(async (provider2, i2) => {
@@ -117090,14 +117090,14 @@ async function executeProvider(provider, ordinal2, model, position2, token) {
   }
   return new HoverProviderResult(provider, result, ordinal2);
 }
-function getHoverProviderResultsAsAsyncIterable(registry, model, position2, token, recursive = false) {
-  const providers = registry.ordered(model, recursive);
+function getHoverProviderResultsAsAsyncIterable(registry2, model, position2, token, recursive = false) {
+  const providers = registry2.ordered(model, recursive);
   const promises = providers.map((provider, index3) => executeProvider(provider, index3, model, position2, token));
   return AsyncIterableProducer.fromPromisesResolveOrder(promises).coalesce();
 }
-async function getHoversPromise(registry, model, position2, token, recursive = false) {
+async function getHoversPromise(registry2, model, position2, token, recursive = false) {
   const out = [];
-  for await (const item of getHoverProviderResultsAsAsyncIterable(registry, model, position2, token, recursive)) {
+  for await (const item of getHoverProviderResultsAsAsyncIterable(registry2, model, position2, token, recursive)) {
     out.push(item.hover);
   }
   return out;
@@ -118558,9 +118558,9 @@ var init_inlayHints = __esm({
       }
     };
     _InlayHintsFragments = class _InlayHintsFragments {
-      static async create(registry, model, ranges2, token) {
+      static async create(registry2, model, ranges2, token) {
         const data3 = [];
-        const promises = registry.ordered(model).reverse().map((provider) => ranges2.map(async (range8) => {
+        const promises = registry2.ordered(model).reverse().map((provider) => ranges2.map(async (range8) => {
           try {
             const result = await provider.provideInlayHints(model, range8, token);
             if (result?.hints.length || provider.onDidChangeInlayHints) {
@@ -128712,8 +128712,8 @@ function shouldIncludeLocationLink(sourceModel, loc) {
   }
   return true;
 }
-async function getLocationLinks(model, position2, registry, recursive, provide) {
-  const provider = registry.ordered(model, recursive);
+async function getLocationLinks(model, position2, registry2, recursive, provide) {
+  const provider = registry2.ordered(model, recursive);
   const promises = provider.map((provider2) => {
     return Promise.resolve(provide(provider2, model, position2)).then(void 0, (err) => {
       onUnexpectedExternalError(err);
@@ -128723,28 +128723,28 @@ async function getLocationLinks(model, position2, registry, recursive, provide) 
   const values3 = await Promise.all(promises);
   return coalesce(values3.flat()).filter((loc) => shouldIncludeLocationLink(model, loc));
 }
-function getDefinitionsAtPosition(registry, model, position2, recursive, token) {
-  return getLocationLinks(model, position2, registry, recursive, (provider, model2, position3) => {
+function getDefinitionsAtPosition(registry2, model, position2, recursive, token) {
+  return getLocationLinks(model, position2, registry2, recursive, (provider, model2, position3) => {
     return provider.provideDefinition(model2, position3, token);
   });
 }
-function getDeclarationsAtPosition(registry, model, position2, recursive, token) {
-  return getLocationLinks(model, position2, registry, recursive, (provider, model2, position3) => {
+function getDeclarationsAtPosition(registry2, model, position2, recursive, token) {
+  return getLocationLinks(model, position2, registry2, recursive, (provider, model2, position3) => {
     return provider.provideDeclaration(model2, position3, token);
   });
 }
-function getImplementationsAtPosition(registry, model, position2, recursive, token) {
-  return getLocationLinks(model, position2, registry, recursive, (provider, model2, position3) => {
+function getImplementationsAtPosition(registry2, model, position2, recursive, token) {
+  return getLocationLinks(model, position2, registry2, recursive, (provider, model2, position3) => {
     return provider.provideImplementation(model2, position3, token);
   });
 }
-function getTypeDefinitionsAtPosition(registry, model, position2, recursive, token) {
-  return getLocationLinks(model, position2, registry, recursive, (provider, model2, position3) => {
+function getTypeDefinitionsAtPosition(registry2, model, position2, recursive, token) {
+  return getLocationLinks(model, position2, registry2, recursive, (provider, model2, position3) => {
     return provider.provideTypeDefinition(model2, position3, token);
   });
 }
-function getReferencesAtPosition(registry, model, position2, compact, recursive, token) {
-  return getLocationLinks(model, position2, registry, recursive, async (provider, model2, position3) => {
+function getReferencesAtPosition(registry2, model, position2, compact, recursive, token) {
+  return getLocationLinks(model, position2, registry2, recursive, async (provider, model2, position3) => {
     const result = (await provider.provideReferences(model2, position3, { includeDeclaration: true }, token))?.filter((ref2) => shouldIncludeLocationLink(model2, ref2));
     if (!compact || !result || result.length !== 2) {
       return result;
@@ -140105,10 +140105,10 @@ var init_outlineModel = __esm({
       }
     };
     OutlineModel = class _OutlineModel extends TreeElement {
-      static create(registry, textModel, token) {
+      static create(registry2, textModel, token) {
         const cts = new CancellationTokenSource(token);
         const result = new _OutlineModel(textModel.uri);
-        const provider = registry.ordered(textModel);
+        const provider = registry2.ordered(textModel);
         const promises = provider.map((provider2, index3) => {
           const id2 = TreeElement.findId(`provider_${index3}`, result);
           const group2 = new OutlineGroup(id2, result, provider2.displayName ?? "Unknown Outline Provider", index3);
@@ -140128,15 +140128,15 @@ var init_outlineModel = __esm({
             }
           });
         });
-        const listener2 = registry.onDidChange(() => {
-          const newProvider = registry.ordered(textModel);
+        const listener2 = registry2.onDidChange(() => {
+          const newProvider = registry2.ordered(textModel);
           if (!equals2(newProvider, provider)) {
             cts.cancel();
           }
         });
         return Promise.all(promises).then(() => {
           if (cts.token.isCancellationRequested && !token.isCancellationRequested) {
-            return _OutlineModel.create(registry, textModel, token);
+            return _OutlineModel.create(registry2, textModel, token);
           } else {
             return result._compact();
           }
@@ -140237,8 +140237,8 @@ var init_outlineModel = __esm({
         this._disposables.dispose();
       }
       async getOrCreate(textModel, token) {
-        const registry = this._languageFeaturesService.documentSymbolProvider;
-        const provider = registry.ordered(textModel);
+        const registry2 = this._languageFeaturesService.documentSymbolProvider;
+        const provider = registry2.ordered(textModel);
         let data3 = this._cache.get(textModel.id);
         if (!data3 || data3.versionId !== textModel.getVersionId() || !equals2(data3.provider, provider)) {
           const source3 = new CancellationTokenSource();
@@ -140247,7 +140247,7 @@ var init_outlineModel = __esm({
             provider,
             promiseCnt: 0,
             source: source3,
-            promise: OutlineModel.create(registry, textModel, source3.token),
+            promise: OutlineModel.create(registry2, textModel, source3.token),
             model: void 0
           };
           this._cache.set(textModel.id, data3);
@@ -140506,15 +140506,15 @@ var init_validation = __esm({
         this.validators = validators;
       }
       validate(content2) {
-        let lastError;
+        let lastError2;
         for (const validator2 of this.validators) {
           const { content: value3, error: error3 } = validator2.validate(content2);
           if (!error3) {
             return { content: value3, error: void 0 };
           }
-          lastError = error3;
+          lastError2 = error3;
         }
-        return { content: void 0, error: lastError };
+        return { content: void 0, error: lastError2 };
       }
       getJSONSchema() {
         return {
@@ -140544,7 +140544,7 @@ var init_validation = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/suggest/browser/suggest.js
-async function provideSuggestionItems(registry, model, position2, options = CompletionOptions.default, context3 = {
+async function provideSuggestionItems(registry2, model, position2, options = CompletionOptions.default, context3 = {
   triggerKind: 0
   /* languages.CompletionTriggerKind.Invoke */
 }, token = CancellationToken.None) {
@@ -140598,7 +140598,7 @@ async function provideSuggestionItems(registry, model, position2, options = Comp
       return;
     }
   })();
-  for (const providerGroup of registry.orderedGroups(model)) {
+  for (const providerGroup of registry2.orderedGroups(model)) {
     let didAddResult = false;
     await Promise.all(providerGroup.map(async (provider) => {
       if (options.providerItemsToReuse.has(provider)) {
@@ -165775,8 +165775,8 @@ var init_multicursor = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/parameterHints/browser/provideSignatureHelp.js
-async function provideSignatureHelp(registry, model, position2, context3, token) {
-  const supports = registry.ordered(model);
+async function provideSignatureHelp(registry2, model, position2, context3, token) {
+  const supports = registry2.ordered(model);
   for (const support of supports) {
     try {
       const result = await support.provideSignatureHelp(model, position2, token, context3);
@@ -167478,8 +167478,8 @@ var init_renameWidget2 = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/rename/browser/rename.js
-async function rename(registry, model, position2, newName) {
-  const skeleton = new RenameSkeleton(model, position2, registry);
+async function rename(registry2, model, position2, newName) {
+  const skeleton = new RenameSkeleton(model, position2, registry2);
   const loc = await skeleton.resolveRenameLocation(CancellationToken.None);
   if (loc?.rejectReason) {
     return { edits: [], rejectReason: loc.rejectReason };
@@ -167531,11 +167531,11 @@ var init_rename = __esm({
       };
     };
     RenameSkeleton = class {
-      constructor(model, position2, registry) {
+      constructor(model, position2, registry2) {
         this.model = model;
         this.position = position2;
         this._providerRenameIdx = 0;
-        this._providers = registry.ordered(model);
+        this._providers = registry2.ordered(model);
       }
       hasProvider() {
         return this._providers.length > 0;
@@ -168908,15 +168908,15 @@ function isSemanticTokens(v2) {
 function isSemanticTokensEdits(v2) {
   return v2 && Array.isArray(v2.edits);
 }
-function hasDocumentSemanticTokensProvider(registry, model) {
-  return registry.has(model);
+function hasDocumentSemanticTokensProvider(registry2, model) {
+  return registry2.has(model);
 }
-function getDocumentSemanticTokensProviders(registry, model) {
-  const groups = registry.orderedGroups(model);
+function getDocumentSemanticTokensProviders(registry2, model) {
+  const groups = registry2.orderedGroups(model);
   return groups.length > 0 ? groups[0] : [];
 }
-async function getDocumentSemanticTokens(registry, model, lastProvider, lastResultId, token) {
-  const providers = getDocumentSemanticTokensProviders(registry, model);
+async function getDocumentSemanticTokens(registry2, model, lastProvider, lastResultId, token) {
+  const providers = getDocumentSemanticTokensProviders(registry2, model);
   const results = await Promise.all(providers.map(async (provider) => {
     let result;
     let error3 = null;
@@ -168944,8 +168944,8 @@ async function getDocumentSemanticTokens(registry, model, lastProvider, lastResu
   }
   return null;
 }
-function _getDocumentSemanticTokensProviderHighestGroup(registry, model) {
-  const result = registry.orderedGroups(model);
+function _getDocumentSemanticTokensProviderHighestGroup(registry2, model) {
+  const result = registry2.orderedGroups(model);
   return result.length > 0 ? result[0] : null;
 }
 function hasDocumentRangeSemanticTokensProvider(providers, model) {
@@ -168955,8 +168955,8 @@ function getDocumentRangeSemanticTokensProviders(providers, model) {
   const groups = providers.orderedGroups(model);
   return groups.length > 0 ? groups[0] : [];
 }
-async function getDocumentRangeSemanticTokens(registry, model, range8, token) {
-  const providers = getDocumentRangeSemanticTokensProviders(registry, model);
+async function getDocumentRangeSemanticTokens(registry2, model, range8, token) {
+  const providers = getDocumentRangeSemanticTokensProviders(registry2, model);
   const results = await Promise.all(providers.map(async (provider) => {
     let result;
     try {
@@ -169690,8 +169690,8 @@ var init_wordSelections = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/smartSelect/browser/smartSelect.js
-async function provideSelectionRanges(registry, model, positions, options, token) {
-  const providers = registry.all(model).concat(new WordSelectionRangeProvider(options.selectSubwords));
+async function provideSelectionRanges(registry2, model, positions, options, token) {
+  const providers = registry2.all(model).concat(new WordSelectionRangeProvider(options.selectSubwords));
   if (providers.length === 1) {
     providers.unshift(new BracketSelectionRangeProvider());
   }
@@ -169951,10 +169951,10 @@ var init_smartSelect = __esm({
       const [resource, positions] = args;
       assertType(URI.isUri(resource));
       assertType(isArrayOf(positions, (p) => Position.isIPosition(p)));
-      const registry = accessor2.get(ILanguageFeaturesService).selectionRangeProvider;
+      const registry2 = accessor2.get(ILanguageFeaturesService).selectionRangeProvider;
       const reference = await accessor2.get(ITextModelService).createModelReference(resource);
       try {
-        return provideSelectionRanges(registry, reference.object.textEditorModel, positions.map(Position.lift), { selectLeadingAndTrailingWhitespace: true, selectSubwords: true }, CancellationToken.None);
+        return provideSelectionRanges(registry2, reference.object.textEditorModel, positions.map(Position.lift), { selectLeadingAndTrailingWhitespace: true, selectSubwords: true }, CancellationToken.None);
       } finally {
         reference.dispose();
       }
@@ -172326,8 +172326,8 @@ var init_textualHighlightProvider = __esm({
 });
 
 // node_modules/monaco-editor/esm/vs/editor/contrib/wordHighlighter/browser/wordHighlighter.js
-function getOccurrencesAtPosition(registry, model, position2, token) {
-  const orderedByScore = registry.ordered(model);
+function getOccurrencesAtPosition(registry2, model, position2, token) {
+  const orderedByScore = registry2.ordered(model);
   return first(orderedByScore.map((provider) => () => {
     return Promise.resolve(provider.provideDocumentHighlights(model, position2, token)).then(void 0, onUnexpectedExternalError);
   }), (result) => result !== void 0 && result !== null).then((result) => {
@@ -172339,8 +172339,8 @@ function getOccurrencesAtPosition(registry, model, position2, token) {
     return new ResourceMap();
   });
 }
-function getOccurrencesAcrossMultipleModels(registry, model, position2, token, otherModels) {
-  const orderedByScore = registry.ordered(model);
+function getOccurrencesAcrossMultipleModels(registry2, model, position2, token, otherModels) {
+  const orderedByScore = registry2.ordered(model);
   return first(orderedByScore.map((provider) => () => {
     const filteredModels = otherModels.filter((otherModel) => {
       return shouldSynchronizeModel(otherModel);
@@ -172350,11 +172350,11 @@ function getOccurrencesAcrossMultipleModels(registry, model, position2, token, o
     return Promise.resolve(provider.provideMultiDocumentHighlights(model, position2, filteredModels, token)).then(void 0, onUnexpectedExternalError);
   }), (result) => result !== void 0 && result !== null);
 }
-function computeOccurencesAtPosition(registry, model, selection, wordSeparators2) {
-  return new SemanticOccurenceAtPositionRequest(model, selection, wordSeparators2, registry);
+function computeOccurencesAtPosition(registry2, model, selection, wordSeparators2) {
+  return new SemanticOccurenceAtPositionRequest(model, selection, wordSeparators2, registry2);
 }
-function computeOccurencesMultiModel(registry, model, selection, wordSeparators2, otherModels) {
-  return new MultiModelOccurenceRequest(model, selection, wordSeparators2, registry, otherModels);
+function computeOccurencesMultiModel(registry2, model, selection, wordSeparators2, otherModels) {
+  return new MultiModelOccurenceRequest(model, selection, wordSeparators2, registry2, otherModels);
 }
 var __decorate158, __param152, WordHighlighter_1, WordHighlighterContribution_1, ctxHasWordHighlights, OccurenceAtPositionRequest, SemanticOccurenceAtPositionRequest, MultiModelOccurenceRequest, _a82, WordHighlighter, _a83, WordHighlighterContribution, WordHighlightNavigationAction, NextWordHighlightAction, PrevWordHighlightAction, TriggerWordHighlightAction;
 var init_wordHighlighter = __esm({
@@ -184759,9 +184759,9 @@ var init_configurationModels = __esm({
         this._restrictedConfigurations = restricted || [];
       }
       doParseRaw(raw, options) {
-        const registry = Registry.as(Extensions4.Configuration);
-        const configurationProperties = registry.getConfigurationProperties();
-        const excludedConfigurationProperties = registry.getExcludedConfigurationProperties();
+        const registry2 = Registry.as(Extensions4.Configuration);
+        const configurationProperties = registry2.getConfigurationProperties();
+        const excludedConfigurationProperties = registry2.getExcludedConfigurationProperties();
         const filtered = this.filter(raw, configurationProperties, excludedConfigurationProperties, true, options);
         raw = filtered.raw;
         const contents = toValuesTree(raw, (message) => this.logService.error(`Conflict in settings file ${this._name}: ${message}`));
@@ -292452,7 +292452,7 @@ async function _embed(el, spec, opts = {}, loader2) {
   return { view, spec, vgSpec, finalize: finalize2, embedOptions: opts };
 }
 
-// ../pkg/snippets/ggsql-wasm-08eadbe83582c0f3/library/dist/lib.js
+// ../pkg/snippets/ggsql-wasm-d2feae725d330de5/library/dist/lib.js
 function convert_csv(bytes) {
   const text4 = new TextDecoder().decode(bytes);
   const lines = parseCSVLines(text4);
@@ -294846,7 +294846,9 @@ async function convert_parquet(bytes) {
     slice: (start, end) => Promise.resolve(buffer.slice(start, end))
   };
   const rows = await parquetReadObjects({
-    file: asyncBuffer
+    file: asyncBuffer,
+    geoparquet: false,
+    utf8: false
   });
   if (rows.length === 0) return [];
   const colNames = Object.keys(rows[0]);
@@ -294861,12 +294863,15 @@ function inferColumnType(values3) {
   let hasNumber = false;
   let hasBool = false;
   let hasDate = false;
+  let hasBinary = false;
   let allSafeInt = true;
   let allMidnight = true;
   for (let i2 = 0; i2 < values3.length; i2++) {
     const v2 = values3[i2];
     if (v2 === null || v2 === void 0) continue;
-    if (v2 instanceof Date) {
+    if (v2 instanceof Uint8Array) {
+      hasBinary = true;
+    } else if (v2 instanceof Date) {
       hasDate = true;
       if (v2.getUTCHours() !== 0 || v2.getUTCMinutes() !== 0 || v2.getUTCSeconds() !== 0 || v2.getUTCMilliseconds() !== 0) {
         allMidnight = false;
@@ -294882,6 +294887,7 @@ function inferColumnType(values3) {
       return "string";
     }
   }
+  if (hasBinary) return "binary";
   if (hasDate) return allMidnight ? "date" : "datetime";
   if (hasBool && !hasNumber) return "bool";
   if (hasNumber) return allSafeInt ? "i64" : "f64";
@@ -294947,6 +294953,20 @@ function buildColumn(name, rawValues) {
     }
     return { name, type: type3, values: values22, nulls };
   }
+  if (type3 === "binary") {
+    const values22 = [];
+    for (let i2 = 0; i2 < len; i2++) {
+      const v2 = rawValues[i2];
+      if (v2 === null || v2 === void 0) {
+        values22.push(new Uint8Array(0));
+        nulls[i2] = 0;
+      } else {
+        values22.push(v2);
+        nulls[i2] = 1;
+      }
+    }
+    return { name, type: type3, values: values22, nulls };
+  }
   const values3 = [];
   for (let i2 = 0; i2 < len; i2++) {
     const v2 = rawValues[i2];
@@ -294959,6 +294979,361 @@ function buildColumn(name, rawValues) {
     }
   }
   return { name, type: type3, values: values3, nulls };
+}
+var PAGE = 65536;
+var EXT_STACK_SIZE = 16 * 1024 * 1024;
+var registry = /* @__PURE__ */ new Map();
+var lastError = null;
+var nextHandle = 1;
+var handleMap = /* @__PURE__ */ new Map();
+var sharedMemory = null;
+var sharedTable = null;
+var hostExports = null;
+var tableIndexCache = /* @__PURE__ */ new Map();
+function canonicalTableIndex(fn) {
+  const cached = tableIndexCache.get(fn);
+  if (cached !== void 0) return cached;
+  const idx = sharedTable.grow(1);
+  sharedTable.set(idx, fn);
+  tableIndexCache.set(fn, idx);
+  return idx;
+}
+function cacheTableRange(start, end) {
+  for (let i2 = start; i2 < end; i2++) {
+    const fn = sharedTable.get(i2);
+    if (typeof fn === "function" && !tableIndexCache.has(fn)) {
+      tableIndexCache.set(fn, i2);
+    }
+  }
+}
+function initExtensionLoader(wasmExports) {
+  hostExports = wasmExports;
+  sharedMemory = wasmExports.memory;
+  sharedTable = wasmExports.__indirect_function_table;
+  if (!sharedMemory) throw new Error("Main module does not export 'memory'");
+  if (!sharedTable) throw new Error("Main module does not export '__indirect_function_table'");
+  cacheTableRange(0, sharedTable.length);
+  globalThis.__sqlite_ext = {
+    dlOpen,
+    dlSym,
+    dlClose,
+    dlError
+  };
+}
+async function installExtension(name, wasmSource) {
+  if (!sharedMemory || !sharedTable || !hostExports) {
+    throw new Error("Call initExtensionLoader() before installExtension()");
+  }
+  if (registry.has(name)) {
+    console.warn(`[ext] extension '${name}' is already installed; skipping`);
+    return;
+  }
+  let bytes;
+  if (typeof wasmSource === "string") {
+    const response = await fetch(wasmSource);
+    if (!response.ok) throw new Error(`Failed to fetch extension: ${response.status}`);
+    bytes = await response.arrayBuffer();
+  } else if (wasmSource instanceof Response) {
+    bytes = await wasmSource.arrayBuffer();
+  } else if (ArrayBuffer.isView(wasmSource)) {
+    bytes = wasmSource.byteOffset === 0 && wasmSource.byteLength === wasmSource.buffer.byteLength ? wasmSource.buffer : wasmSource.buffer.slice(
+      wasmSource.byteOffset,
+      wasmSource.byteOffset + wasmSource.byteLength
+    );
+  } else {
+    bytes = wasmSource;
+  }
+  const wasmBytes = new Uint8Array(bytes);
+  const extModule = await WebAssembly.compile(bytes);
+  const dylink = parseDylinkMemInfo(wasmBytes);
+  let dataSize;
+  if (dylink) {
+    dataSize = dylink.memorySize;
+    if (1 << dylink.memoryAlign > PAGE) {
+      console.warn(
+        `[ext] '${name}' requests 2^${dylink.memoryAlign} memory alignment; only page alignment is provided`
+      );
+    }
+  } else {
+    console.warn(`[ext] '${name}' has no dylink.0 section; sizing data segment from file size`);
+    dataSize = bytes.byteLength;
+  }
+  const dataBytes = alignUp(dataSize, PAGE);
+  const currentBytes = sharedMemory.buffer.byteLength;
+  sharedMemory.grow((dataBytes + EXT_STACK_SIZE + PAGE) / PAGE);
+  const memBase = currentBytes;
+  const stackTop = memBase + dataBytes + EXT_STACK_SIZE;
+  const lpadContextAddr = stackTop + PAGE - 64;
+  const moduleExportDescs = WebAssembly.Module.exports(extModule);
+  const tableSlots = dylink?.tableSize ?? countElementSegmentEntries(wasmBytes);
+  const tableBase = sharedTable.length;
+  sharedTable.grow(tableSlots);
+  const imports = {
+    env: {
+      memory: sharedMemory,
+      __indirect_function_table: sharedTable,
+      __memory_base: new WebAssembly.Global({ value: "i32", mutable: false }, memBase),
+      __table_base: new WebAssembly.Global({ value: "i32", mutable: false }, tableBase),
+      __stack_pointer: new WebAssembly.Global({ value: "i32", mutable: true }, stackTop)
+    }
+  };
+  const extExportNames = new Set(
+    moduleExportDescs.filter((e3) => e3.kind === "function").map((e3) => e3.name)
+  );
+  let extInstance = null;
+  let cppExceptionTag = null;
+  const moduleImportDescs = WebAssembly.Module.imports(extModule);
+  for (const imp of moduleImportDescs) {
+    if (imp.module === "env" && Object.hasOwn(imports.env, imp.name)) {
+      continue;
+    }
+    if (imp.module === "env" && imp.kind === "function") {
+      const hostFn = hostExports[imp.name];
+      if (typeof hostFn === "function") {
+        imports.env[imp.name] = hostFn;
+      } else if (imp.name === "abort") {
+        imports.env[imp.name] = () => {
+          throw new Error("[ext] abort() called from extension");
+        };
+      } else if (imp.name === "exit") {
+        imports.env[imp.name] = (code) => {
+          throw new Error(`[ext] exit(${code}) called from extension`);
+        };
+      } else if (extExportNames.has(imp.name)) {
+        const sym = imp.name;
+        imports.env[sym] = (...args) => {
+          const fn = extInstance?.exports[sym];
+          if (typeof fn !== "function") {
+            throw new Error(`[ext] self-import '${sym}' called before instantiation completed`);
+          }
+          return fn(...args);
+        };
+      } else if (imp.name === "__ext_trap") {
+        const trapNames = { 1: "abort()", 2: "__assert_fail()", 3: "abort() [stubs]" };
+        imports.env[imp.name] = (code) => {
+          const name2 = code >= 100 ? `exit(${code - 100})` : trapNames[code] ?? `trap(${code})`;
+          throw new Error(`[ext] ${name2} called from extension`);
+        };
+      } else if (imp.name === "_Unwind_RaiseException") {
+        imports.env[imp.name] = (excPtr) => {
+          if (cppExceptionTag) {
+            throw new WebAssembly.Exception(cppExceptionTag, [excPtr], { traceStack: true });
+          }
+          throw new Error("_Unwind_RaiseException: no cpp exception tag");
+        };
+      } else if (imp.name === "_Unwind_CallPersonality") {
+        const ADJUSTED_PTR_OFFSET = -8;
+        const THROWN_OBJECT_OFFSET = 32;
+        const LPAD_SELECTOR_OFFSET = 8;
+        const URC_HANDLER_FOUND = 6;
+        imports.env[imp.name] = (excPtr) => {
+          const view = new DataView(sharedMemory.buffer);
+          view.setUint32(excPtr + ADJUSTED_PTR_OFFSET, excPtr + THROWN_OBJECT_OFFSET, true);
+          view.setInt32(lpadContextAddr + LPAD_SELECTOR_OFFSET, 1, true);
+          return URC_HANDLER_FOUND;
+        };
+      } else if (imp.name === "_Unwind_DeleteException") {
+        imports.env[imp.name] = (excPtr) => {
+          const URC_FOREIGN_EXCEPTION_CAUGHT = 1;
+          const cleanupIdx = new DataView(sharedMemory.buffer).getUint32(excPtr + 8, true);
+          if (cleanupIdx) {
+            const fn = sharedTable.get(cleanupIdx);
+            if (typeof fn === "function") fn(URC_FOREIGN_EXCEPTION_CAUGHT, excPtr);
+          }
+        };
+      } else {
+        const unresName = imp.name;
+        console.warn(`[ext] unresolved import '${unresName}' will throw if called`);
+        imports.env[imp.name] = () => {
+          throw new Error(`[ext] call to unresolved import '${unresName}'`);
+        };
+      }
+    }
+    if (imp.module === "env" && imp.kind === "tag") {
+      const params2 = imp.type?.parameters ?? ["i32"];
+      const tag2 = new WebAssembly.Tag({ parameters: params2 });
+      imports.env[imp.name] = tag2;
+      if (imp.name === "__cpp_exception") {
+        cppExceptionTag = tag2;
+      }
+    }
+    if ((imp.module === "GOT.func" || imp.module === "GOT.mem") && imp.kind === "global") {
+      if (!imports[imp.module]) imports[imp.module] = {};
+      const hostFn = hostExports[imp.name];
+      if (typeof hostFn === "function") {
+        imports[imp.module][imp.name] = new WebAssembly.Global({ value: "i32", mutable: true }, canonicalTableIndex(hostFn));
+      } else if (imp.module === "GOT.mem" && imp.name === "__wasm_lpad_context") {
+        imports[imp.module][imp.name] = new WebAssembly.Global({ value: "i32", mutable: true }, lpadContextAddr);
+      } else if (extExportNames.has(imp.name) || moduleExportDescs.some((e3) => e3.name === imp.name)) {
+        imports[imp.module][imp.name] = new WebAssembly.Global({ value: "i32", mutable: true }, 0);
+      } else {
+        console.warn(`[ext] unresolved ${imp.module} import '${imp.name}' bound to address 0`);
+        imports[imp.module][imp.name] = new WebAssembly.Global({ value: "i32", mutable: true }, 0);
+      }
+    }
+  }
+  extInstance = await WebAssembly.instantiate(extModule, imports);
+  cacheTableRange(tableBase, sharedTable.length);
+  const applyRelocs = extInstance.exports.__wasm_apply_data_relocs;
+  if (applyRelocs) {
+    applyRelocs();
+    let fixedAny = false;
+    for (const imp of moduleImportDescs) {
+      if (imp.module === "GOT.func" && imp.kind === "global") {
+        const g = imports["GOT.func"]?.[imp.name];
+        if (g && g.value === 0) {
+          const fn = extInstance.exports[imp.name];
+          if (typeof fn === "function") {
+            g.value = canonicalTableIndex(fn);
+            fixedAny = true;
+          }
+        }
+      }
+      if (imp.module === "GOT.mem" && imp.kind === "global") {
+        const g = imports["GOT.mem"]?.[imp.name];
+        if (g && g.value === 0) {
+          const exp4 = extInstance.exports[imp.name];
+          if (exp4 && typeof exp4 === "object" && "value" in exp4) {
+            g.value = exp4.value + memBase;
+            fixedAny = true;
+          }
+        }
+      }
+    }
+    if (fixedAny) {
+      applyRelocs();
+    }
+  }
+  const callCtors = extInstance.exports.__wasm_call_ctors;
+  if (callCtors) {
+    callCtors();
+  }
+  const extExports = {};
+  for (const exp4 of moduleExportDescs) {
+    if (exp4.kind === "function") {
+      const fn = extInstance.exports[exp4.name];
+      extExports[exp4.name] = canonicalTableIndex(fn);
+    }
+  }
+  registry.set(name, {
+    instance: extInstance,
+    exports: extExports
+  });
+}
+function alignUp(value3, alignment) {
+  return Math.ceil(value3 / alignment) * alignment;
+}
+function readLEB128(data3, pos) {
+  let val = 0, shift2 = 0;
+  while (true) {
+    const b2 = data3[pos++];
+    val |= (b2 & 127) << shift2;
+    shift2 += 7;
+    if (!(b2 & 128)) break;
+  }
+  return [val, pos];
+}
+function parseDylinkMemInfo(wasm2) {
+  let pos = 8;
+  while (pos < wasm2.length) {
+    const sid = wasm2[pos++];
+    let size2;
+    [size2, pos] = readLEB128(wasm2, pos);
+    const end = pos + size2;
+    if (sid === 0) {
+      let nlen, p;
+      [nlen, p] = readLEB128(wasm2, pos);
+      const sectionName = new TextDecoder().decode(wasm2.subarray(p, p + nlen));
+      if (sectionName === "dylink.0") {
+        let q = p + nlen;
+        while (q < end) {
+          const sub = wasm2[q++];
+          let ssize;
+          [ssize, q] = readLEB128(wasm2, q);
+          const send = q + ssize;
+          if (sub === 1) {
+            let memorySize, memoryAlign, tableSize, tableAlign;
+            [memorySize, q] = readLEB128(wasm2, q);
+            [memoryAlign, q] = readLEB128(wasm2, q);
+            [tableSize, q] = readLEB128(wasm2, q);
+            [tableAlign, q] = readLEB128(wasm2, q);
+            return { memorySize, memoryAlign, tableSize, tableAlign };
+          }
+          q = send;
+        }
+        return null;
+      }
+    }
+    pos = end;
+  }
+  return null;
+}
+function countElementSegmentEntries(wasm2) {
+  let pos = 8;
+  let total = 0;
+  while (pos < wasm2.length) {
+    const sid = wasm2[pos++];
+    let [size2, p] = readLEB128(wasm2, pos);
+    pos = p;
+    const end = pos + size2;
+    if (sid === 9) {
+      let [count2, p2] = readLEB128(wasm2, pos);
+      pos = p2;
+      for (let i2 = 0; i2 < count2; i2++) {
+        const flags = wasm2[pos++];
+        if (flags !== 0) break;
+        const op = wasm2[pos++];
+        if (op !== 65 && op !== 35) break;
+        [, pos] = readLEB128(wasm2, pos);
+        if (wasm2[pos++] !== 11) break;
+        let [numElem, p3] = readLEB128(wasm2, pos);
+        pos = p3;
+        total += numElem;
+        for (let j = 0; j < numElem; j++) {
+          [, pos] = readLEB128(wasm2, pos);
+        }
+      }
+      break;
+    }
+    pos = end;
+  }
+  return total || 256;
+}
+function dlOpen(filename) {
+  lastError = null;
+  const name = filename.replace(/^.*[\\/]/, "").replace(/\.wasm$/, "");
+  if (!registry.has(name)) {
+    lastError = `Extension '${name}' not installed. Call installExtension() first.`;
+    return 0;
+  }
+  const handle = nextHandle++;
+  handleMap.set(handle, name);
+  return handle;
+}
+function dlSym(handle, symbol2) {
+  lastError = null;
+  const name = handleMap.get(handle);
+  if (!name) {
+    lastError = `Invalid extension handle: ${handle}`;
+    return 0;
+  }
+  const ext = registry.get(name);
+  if (!ext) {
+    lastError = `Extension '${name}' not found in registry`;
+    return 0;
+  }
+  const idx = ext.exports[symbol2];
+  if (idx === void 0) {
+    lastError = `Symbol '${symbol2}' not found in extension '${name}'`;
+    return 0;
+  }
+  return idx;
+}
+function dlClose(handle) {
+  handleMap.delete(handle);
+}
+function dlError() {
+  return lastError;
 }
 var EPOCH = Date.UTC(1970, 0, 1);
 var MS_PER_DAY = 864e5;
@@ -295004,7 +295379,7 @@ var GgsqlContext = class {
       return getStringFromWasm0(ptr2, len2);
     } finally {
       wasm.__wbindgen_add_to_stack_pointer(16);
-      wasm.__wbindgen_export4(deferred3_0, deferred3_1, 1);
+      wasm.__wbindgen_export5(deferred3_0, deferred3_1, 1);
     }
   }
   /**
@@ -295036,7 +295411,7 @@ var GgsqlContext = class {
       return getStringFromWasm0(ptr2, len2);
     } finally {
       wasm.__wbindgen_add_to_stack_pointer(16);
-      wasm.__wbindgen_export4(deferred3_0, deferred3_1, 1);
+      wasm.__wbindgen_export5(deferred3_0, deferred3_1, 1);
     }
   }
   /**
@@ -295059,6 +295434,31 @@ var GgsqlContext = class {
     return takeObject(ret);
   }
   /**
+   * Load a previously installed SQLite extension.
+   *
+   * `entry_point` is the C init function name. If omitted, SQLite
+   * derives it from the extension name.
+   * @param {string} name
+   * @param {string | null} [entry_point]
+   */
+  load_extension(name, entry_point) {
+    try {
+      const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+      const ptr0 = passStringToWasm0(name, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+      const len0 = WASM_VECTOR_LEN;
+      var ptr1 = isLikeNone(entry_point) ? 0 : passStringToWasm0(entry_point, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+      var len1 = WASM_VECTOR_LEN;
+      wasm.ggsqlcontext_load_extension(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
+      var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+      var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+      if (r1) {
+        throw takeObject(r0);
+      }
+    } finally {
+      wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+  }
+  /**
    * Create a new ggsql context
    */
   constructor() {
@@ -295071,7 +295471,7 @@ var GgsqlContext = class {
       if (r2) {
         throw takeObject(r1);
       }
-      this.__wbg_ptr = r0 >>> 0;
+      this.__wbg_ptr = r0;
       GgsqlContextFinalization.register(this, this.__wbg_ptr, this);
       return this;
     } finally {
@@ -295143,34 +295543,53 @@ var GgsqlContext = class {
   }
 };
 if (Symbol.dispose) GgsqlContext.prototype[Symbol.dispose] = GgsqlContext.prototype.free;
+function initExtensionLoader2(exports) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    wasm.initExtensionLoader(retptr, addHeapObject(exports));
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    if (r1) {
+      throw takeObject(r0);
+    }
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+function installExtension2(name, source3) {
+  const ptr0 = passStringToWasm0(name, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+  const len0 = WASM_VECTOR_LEN;
+  const ret = wasm.installExtension(ptr0, len0, addHeapObject(source3));
+  return takeObject(ret);
+}
 function __wbg_get_imports() {
   const import0 = {
     __proto__: null,
-    __wbg___wbindgen_debug_string_5398f5bb970e0daa: function(arg0, arg1) {
+    __wbg___wbindgen_debug_string_edece8177ad01481: function(arg0, arg1) {
       const ret = debugString(getObject(arg1));
       const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export, wasm.__wbindgen_export2);
       const len1 = WASM_VECTOR_LEN;
       getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
       getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
     },
-    __wbg___wbindgen_is_function_3c846841762788c1: function(arg0) {
+    __wbg___wbindgen_is_function_5cd60d5cf78b4eef: function(arg0) {
       const ret = typeof getObject(arg0) === "function";
       return ret;
     },
-    __wbg___wbindgen_is_object_781bc9f159099513: function(arg0) {
+    __wbg___wbindgen_is_object_b4593df85baada48: function(arg0) {
       const val = getObject(arg0);
       const ret = typeof val === "object" && val !== null;
       return ret;
     },
-    __wbg___wbindgen_is_string_7ef6b97b02428fae: function(arg0) {
+    __wbg___wbindgen_is_string_dde0fd9020db4434: function(arg0) {
       const ret = typeof getObject(arg0) === "string";
       return ret;
     },
-    __wbg___wbindgen_is_undefined_52709e72fb9f179c: function(arg0) {
+    __wbg___wbindgen_is_undefined_35bb9f4c7fd651d5: function(arg0) {
       const ret = getObject(arg0) === void 0;
       return ret;
     },
-    __wbg___wbindgen_string_get_395e606bd0ee4427: function(arg0, arg1) {
+    __wbg___wbindgen_string_get_d109740c0d18f4d7: function(arg0, arg1) {
       const obj = getObject(arg1);
       const ret = typeof obj === "string" ? obj : void 0;
       var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export, wasm.__wbindgen_export2);
@@ -295178,25 +295597,25 @@ function __wbg_get_imports() {
       getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
       getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
     },
-    __wbg___wbindgen_throw_6ddd609b62940d55: function(arg0, arg1) {
+    __wbg___wbindgen_throw_9c31b086c2b26051: function(arg0, arg1) {
       throw new Error(getStringFromWasm0(arg0, arg1));
     },
-    __wbg__wbg_cb_unref_6b5b6b8576d35cb1: function(arg0) {
+    __wbg__wbg_cb_unref_3fa391f3fcdb55f8: function(arg0) {
       getObject(arg0)._wbg_cb_unref();
     },
-    __wbg_call_2d781c1f4d5c0ef8: function() {
+    __wbg_call_dfde26266607c996: function() {
       return handleError(function(arg0, arg1, arg2) {
         const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
         return addHeapObject(ret);
       }, arguments);
     },
-    __wbg_convert_csv_49e45233894e85f6: function() {
+    __wbg_convert_csv_50901e51f7227ce3: function() {
       return handleError(function(arg0, arg1) {
         const ret = convert_csv(getArrayU8FromWasm0(arg0, arg1));
         return addHeapObject(ret);
       }, arguments);
     },
-    __wbg_convert_parquet_150bf87f64e5256a: function() {
+    __wbg_convert_parquet_a0fc989ff0649c19: function() {
       return handleError(function(arg0, arg1) {
         const ret = convert_parquet(getArrayU8FromWasm0(arg0, arg1));
         return addHeapObject(ret);
@@ -295206,40 +295625,55 @@ function __wbg_get_imports() {
       const ret = getObject(arg0).crypto;
       return addHeapObject(ret);
     },
-    __wbg_from_4bdf88943703fd48: function(arg0) {
+    __wbg_dlClose_82d937b7b0a08049: function(arg0) {
+      globalThis.__sqlite_ext.dlClose(arg0 >>> 0);
+    },
+    __wbg_dlError_69ebd4b85c5b62c7: function(arg0) {
+      const ret = globalThis.__sqlite_ext.dlError();
+      var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+      var len1 = WASM_VECTOR_LEN;
+      getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+      getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+    },
+    __wbg_dlOpen_ebecd1aadc59cce3: function() {
+      return handleError(function(arg0, arg1) {
+        const ret = globalThis.__sqlite_ext.dlOpen(getStringFromWasm0(arg0, arg1));
+        return ret;
+      }, arguments);
+    },
+    __wbg_dlSym_63304127f544972c: function(arg0, arg1, arg2) {
+      const ret = globalThis.__sqlite_ext.dlSym(arg0 >>> 0, getStringFromWasm0(arg1, arg2));
+      return ret;
+    },
+    __wbg_from_fa561fa561dc8031: function(arg0) {
       const ret = Array.from(getObject(arg0));
       return addHeapObject(ret);
     },
-    __wbg_getDate_fbf9a2247e954082: function(arg0) {
+    __wbg_getDate_a52123c8affc9072: function(arg0) {
       const ret = getObject(arg0).getDate();
       return ret;
     },
-    __wbg_getDay_2287a9ab7ef27b82: function(arg0) {
+    __wbg_getDay_50a9ee1e4d17dc24: function(arg0) {
       const ret = getObject(arg0).getDay();
       return ret;
     },
-    __wbg_getFullYear_f6d84c054eee1543: function(arg0) {
+    __wbg_getFullYear_d5d1f7de344fdc5b: function(arg0) {
       const ret = getObject(arg0).getFullYear();
       return ret;
     },
-    __wbg_getHours_391d39cf9970a985: function(arg0) {
+    __wbg_getHours_c974d920209733e8: function(arg0) {
       const ret = getObject(arg0).getHours();
       return ret;
     },
-    __wbg_getMinutes_c6b51adde167b27d: function(arg0) {
+    __wbg_getMinutes_e2e8ae846b37b328: function(arg0) {
       const ret = getObject(arg0).getMinutes();
       return ret;
     },
-    __wbg_getMonth_884df91d4880455c: function(arg0) {
+    __wbg_getMonth_de70091920053153: function(arg0) {
       const ret = getObject(arg0).getMonth();
       return ret;
     },
-    __wbg_getRandomValues_3f44b700395062e5: function() {
-      return handleError(function(arg0, arg1) {
-        globalThis.crypto.getRandomValues(getArrayU8FromWasm0(arg0, arg1));
-      }, arguments);
-    },
-    __wbg_getRandomValues_a1cf2e70b003a59d: function() {
+    __wbg_getRandomValues_15134f5c0ae6b0d0: function() {
       return handleError(function(arg0, arg1) {
         globalThis.crypto.getRandomValues(getArrayU8FromWasm0(arg0, arg1));
       }, arguments);
@@ -295249,42 +295683,53 @@ function __wbg_get_imports() {
         getObject(arg0).getRandomValues(getObject(arg1));
       }, arguments);
     },
-    __wbg_getRandomValues_e17307db78dbd90b: function() {
+    __wbg_getRandomValues_ef12552bf5acd2fe: function() {
       return handleError(function(arg0, arg1) {
         globalThis.crypto.getRandomValues(getArrayU8FromWasm0(arg0, arg1));
       }, arguments);
     },
-    __wbg_getSeconds_53838367bdfd2269: function(arg0) {
+    __wbg_getSeconds_2782a558f414ec05: function(arg0) {
       const ret = getObject(arg0).getSeconds();
       return ret;
     },
-    __wbg_getTime_1dad7b5386ddd2d9: function(arg0) {
+    __wbg_getTime_09f1dd40a44edb30: function(arg0) {
       const ret = getObject(arg0).getTime();
       return ret;
     },
-    __wbg_getTimezoneOffset_639bcf2dde21158b: function(arg0) {
+    __wbg_getTimezoneOffset_96cfb6ddebc9e5ca: function(arg0) {
       const ret = getObject(arg0).getTimezoneOffset();
       return ret;
     },
-    __wbg_get_3ef1eba1850ade27: function() {
+    __wbg_get_98fdf51d029a75eb: function(arg0, arg1) {
+      const ret = getObject(arg0)[arg1 >>> 0];
+      return addHeapObject(ret);
+    },
+    __wbg_get_dcf82ab8aad1a593: function() {
       return handleError(function(arg0, arg1) {
         const ret = Reflect.get(getObject(arg0), getObject(arg1));
         return addHeapObject(ret);
       }, arguments);
     },
-    __wbg_get_a8ee5c45dabc1b3b: function(arg0, arg1) {
-      const ret = getObject(arg0)[arg1 >>> 0];
-      return addHeapObject(ret);
+    __wbg_initExtensionLoader_4f1c857f76bd9e11: function() {
+      return handleError(function(arg0) {
+        initExtensionLoader(getObject(arg0));
+      }, arguments);
     },
-    __wbg_length_550d8a396009cd38: function(arg0) {
+    __wbg_installExtension_000ce4cfedd390e0: function() {
+      return handleError(function(arg0, arg1, arg2) {
+        const ret = installExtension(getStringFromWasm0(arg0, arg1), takeObject(arg2));
+        return addHeapObject(ret);
+      }, arguments);
+    },
+    __wbg_length_2591a0f4f659a55c: function(arg0) {
       const ret = getObject(arg0).length;
       return ret;
     },
-    __wbg_length_b3416cf66a5452c8: function(arg0) {
+    __wbg_length_56fcd3e2b7e0299d: function(arg0) {
       const ret = getObject(arg0).length;
       return ret;
     },
-    __wbg_length_ea16607d7b61445b: function(arg0) {
+    __wbg_length_c7ce929623e7a230: function(arg0) {
       const ret = getObject(arg0).length;
       return ret;
     },
@@ -295292,34 +295737,34 @@ function __wbg_get_imports() {
       const ret = getObject(arg0).msCrypto;
       return addHeapObject(ret);
     },
-    __wbg_new_0_1dcafdf5e786e876: function() {
+    __wbg_new_0_2722fcdb71a888a6: function() {
       const ret = /* @__PURE__ */ new Date();
       return addHeapObject(ret);
     },
-    __wbg_new_1db9947b8e01b15f: function(arg0) {
-      const ret = new Float64Array(getObject(arg0));
-      return addHeapObject(ret);
-    },
-    __wbg_new_5f486cdf45a04d78: function(arg0) {
-      const ret = new Uint8Array(getObject(arg0));
-      return addHeapObject(ret);
-    },
-    __wbg_new_a70fbab9066b301f: function() {
+    __wbg_new_310879b66b6e95e1: function() {
       const ret = new Array();
       return addHeapObject(ret);
     },
-    __wbg_new_fd94ca5c9639abd2: function(arg0) {
+    __wbg_new_32f8228209b17292: function(arg0) {
+      const ret = new Float64Array(getObject(arg0));
+      return addHeapObject(ret);
+    },
+    __wbg_new_7ddec6de44ff8f5d: function(arg0) {
+      const ret = new Uint8Array(getObject(arg0));
+      return addHeapObject(ret);
+    },
+    __wbg_new_859b9002e2668e82: function(arg0) {
       const ret = new Date(getObject(arg0));
       return addHeapObject(ret);
     },
-    __wbg_new_typed_aaaeaf29cf802876: function(arg0, arg1) {
+    __wbg_new_typed_c072c4ce9a2a0cdf: function(arg0, arg1) {
       try {
         var state0 = { a: arg0, b: arg1 };
         var cb0 = (arg02, arg12) => {
           const a3 = state0.a;
           state0.a = 0;
           try {
-            return __wasm_bindgen_func_elem_2730(a3, state0.b, arg02, arg12);
+            return __wasm_bindgen_func_elem_8761(a3, state0.b, arg02, arg12);
           } finally {
             state0.a = a3;
           }
@@ -295327,14 +295772,14 @@ function __wbg_get_imports() {
         const ret = new Promise(cb0);
         return addHeapObject(ret);
       } finally {
-        state0.a = state0.b = 0;
+        state0.a = 0;
       }
     },
-    __wbg_new_with_length_825018a1616e9e55: function(arg0) {
+    __wbg_new_with_length_99887c91eae4abab: function(arg0) {
       const ret = new Uint8Array(arg0 >>> 0);
       return addHeapObject(ret);
     },
-    __wbg_new_with_year_month_day_82496ee7686a68d8: function(arg0, arg1, arg2) {
+    __wbg_new_with_year_month_day_0ccdc1cc3a42b726: function(arg0, arg1, arg2) {
       const ret = new Date(arg0 >>> 0, arg1, arg2);
       return addHeapObject(ret);
     },
@@ -295346,21 +295791,21 @@ function __wbg_get_imports() {
       const ret = getObject(arg0).process;
       return addHeapObject(ret);
     },
-    __wbg_prototypesetcall_79daf97fb14c7a19: function(arg0, arg1, arg2) {
+    __wbg_prototypesetcall_272875b350b1e49b: function(arg0, arg1, arg2) {
       Float64Array.prototype.set.call(getArrayF64FromWasm0(arg0, arg1), getObject(arg2));
     },
-    __wbg_prototypesetcall_d62e5099504357e6: function(arg0, arg1, arg2) {
+    __wbg_prototypesetcall_5f9bdc8d75e07276: function(arg0, arg1, arg2) {
       Uint8Array.prototype.set.call(getArrayU8FromWasm0(arg0, arg1), getObject(arg2));
     },
-    __wbg_push_e87b0e732085a946: function(arg0, arg1) {
+    __wbg_push_b77c476b01548d0a: function(arg0, arg1) {
       const ret = getObject(arg0).push(getObject(arg1));
       return ret;
     },
-    __wbg_queueMicrotask_0c399741342fb10f: function(arg0) {
+    __wbg_queueMicrotask_78d584b53af520f5: function(arg0) {
       const ret = getObject(arg0).queueMicrotask;
       return addHeapObject(ret);
     },
-    __wbg_queueMicrotask_a082d78ce798393e: function(arg0) {
+    __wbg_queueMicrotask_b39ea83c7f01971a: function(arg0) {
       queueMicrotask(getObject(arg0));
     },
     __wbg_randomFillSync_6c25eac9869eb53c: function() {
@@ -295368,7 +295813,7 @@ function __wbg_get_imports() {
         getObject(arg0).randomFillSync(takeObject(arg1));
       }, arguments);
     },
-    __wbg_random_5bb86cae65a45bf6: function() {
+    __wbg_random_a8dfe52b70cb65a5: function() {
       const ret = Math.random();
       return ret;
     },
@@ -295378,35 +295823,35 @@ function __wbg_get_imports() {
         return addHeapObject(ret);
       }, arguments);
     },
-    __wbg_resolve_ae8d83246e5bcc12: function(arg0) {
+    __wbg_resolve_d17db9352f5a220e: function(arg0) {
       const ret = Promise.resolve(getObject(arg0));
       return addHeapObject(ret);
     },
-    __wbg_static_accessor_GLOBAL_8adb955bd33fac2f: function() {
-      const ret = typeof global === "undefined" ? null : global;
-      return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    },
-    __wbg_static_accessor_GLOBAL_THIS_ad356e0db91c7913: function() {
+    __wbg_static_accessor_GLOBAL_THIS_02344c9b09eb08a9: function() {
       const ret = typeof globalThis === "undefined" ? null : globalThis;
       return isLikeNone(ret) ? 0 : addHeapObject(ret);
     },
-    __wbg_static_accessor_SELF_f207c857566db248: function() {
+    __wbg_static_accessor_GLOBAL_ac6d4ac874d5cd54: function() {
+      const ret = typeof global === "undefined" ? null : global;
+      return isLikeNone(ret) ? 0 : addHeapObject(ret);
+    },
+    __wbg_static_accessor_SELF_9b2406c23aeb2023: function() {
       const ret = typeof self === "undefined" ? null : self;
       return isLikeNone(ret) ? 0 : addHeapObject(ret);
     },
-    __wbg_static_accessor_WINDOW_bb9f1ba69d61b386: function() {
+    __wbg_static_accessor_WINDOW_b34d2126934e16ba: function() {
       const ret = typeof window === "undefined" ? null : window;
       return isLikeNone(ret) ? 0 : addHeapObject(ret);
     },
-    __wbg_subarray_a068d24e39478a8a: function(arg0, arg1, arg2) {
+    __wbg_subarray_7c6a0da8f3b4a1ba: function(arg0, arg1, arg2) {
       const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
       return addHeapObject(ret);
     },
-    __wbg_then_098abe61755d12f6: function(arg0, arg1) {
+    __wbg_then_837494e384b37459: function(arg0, arg1) {
       const ret = getObject(arg0).then(getObject(arg1));
       return addHeapObject(ret);
     },
-    __wbg_then_9e335f6dd892bc11: function(arg0, arg1, arg2) {
+    __wbg_then_bd927500e8905df2: function(arg0, arg1, arg2) {
       const ret = getObject(arg0).then(getObject(arg1), getObject(arg2));
       return addHeapObject(ret);
     },
@@ -295415,7 +295860,7 @@ function __wbg_get_imports() {
       return addHeapObject(ret);
     },
     __wbindgen_cast_0000000000000001: function(arg0, arg1) {
-      const ret = makeMutClosure(arg0, arg1, wasm.__wasm_bindgen_func_elem_27054, __wasm_bindgen_func_elem_2714);
+      const ret = makeMutClosure(arg0, arg1, __wasm_bindgen_func_elem_8702);
       return addHeapObject(ret);
     },
     __wbindgen_cast_0000000000000002: function(arg0) {
@@ -295443,10 +295888,10 @@ function __wbg_get_imports() {
     "./ggsql_wasm_bg.js": import0
   };
 }
-function __wasm_bindgen_func_elem_2714(arg0, arg1, arg2) {
+function __wasm_bindgen_func_elem_8702(arg0, arg1, arg2) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    wasm.__wasm_bindgen_func_elem_2714(retptr, arg0, arg1, addHeapObject(arg2));
+    wasm.__wasm_bindgen_func_elem_8702(retptr, arg0, arg1, addHeapObject(arg2));
     var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
     var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     if (r1) {
@@ -295456,12 +295901,12 @@ function __wasm_bindgen_func_elem_2714(arg0, arg1, arg2) {
     wasm.__wbindgen_add_to_stack_pointer(16);
   }
 }
-function __wasm_bindgen_func_elem_2730(arg0, arg1, arg2, arg3) {
-  wasm.__wasm_bindgen_func_elem_2730(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
+function __wasm_bindgen_func_elem_8761(arg0, arg1, arg2, arg3) {
+  wasm.__wasm_bindgen_func_elem_8761(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
 }
 var GgsqlContextFinalization = typeof FinalizationRegistry === "undefined" ? { register: () => {
 }, unregister: () => {
-} } : new FinalizationRegistry((ptr) => wasm.__wbg_ggsqlcontext_free(ptr >>> 0, 1));
+} } : new FinalizationRegistry((ptr) => wasm.__wbg_ggsqlcontext_free(ptr, 1));
 function addHeapObject(obj) {
   if (heap_next === heap.length) heap.push(heap.length + 1);
   const idx = heap_next;
@@ -295471,7 +295916,7 @@ function addHeapObject(obj) {
 }
 var CLOSURE_DTORS = typeof FinalizationRegistry === "undefined" ? { register: () => {
 }, unregister: () => {
-} } : new FinalizationRegistry((state) => state.dtor(state.a, state.b));
+} } : new FinalizationRegistry((state) => wasm.__wbindgen_export4(state.a, state.b));
 function debugString(val) {
   const type3 = typeof val;
   if (type3 == "number" || type3 == "boolean" || val == null) {
@@ -295556,8 +296001,7 @@ function getFloat64ArrayMemory0() {
   return cachedFloat64ArrayMemory0;
 }
 function getStringFromWasm0(ptr, len) {
-  ptr = ptr >>> 0;
-  return decodeText(ptr, len);
+  return decodeText(ptr >>> 0, len);
 }
 var cachedUint8ArrayMemory0 = null;
 function getUint8ArrayMemory0() {
@@ -295582,8 +296026,8 @@ var heap_next = heap.length;
 function isLikeNone(x5) {
   return x5 === void 0 || x5 === null;
 }
-function makeMutClosure(arg0, arg1, dtor, f) {
-  const state = { a: arg0, b: arg1, cnt: 1, dtor };
+function makeMutClosure(arg0, arg1, f) {
+  const state = { a: arg0, b: arg1, cnt: 1 };
   const real = (...args) => {
     state.cnt++;
     const a3 = state.a;
@@ -295597,7 +296041,7 @@ function makeMutClosure(arg0, arg1, dtor, f) {
   };
   real._wbg_cb_unref = () => {
     if (--state.cnt === 0) {
-      state.dtor(state.a, state.b);
+      wasm.__wbindgen_export4(state.a, state.b);
       state.a = 0;
       CLOSURE_DTORS.unregister(state);
     }
@@ -295672,8 +296116,10 @@ if (!("encodeInto" in cachedTextEncoder)) {
 }
 var WASM_VECTOR_LEN = 0;
 var wasmModule;
+var wasmInstance;
 var wasm;
 function __wbg_finalize_init(instance, module2) {
+  wasmInstance = instance;
   wasm = instance.exports;
   wasmModule = module2;
   cachedDataViewMemory0 = null;
@@ -295746,9 +296192,13 @@ var WasmContextManager = class {
   }
   async initialize() {
     if (this.initialized) return;
-    await __wbg_init(WASM_BASE + "ggsql_wasm_bg.wasm");
+    const wasmExports = await __wbg_init(WASM_BASE + "ggsql_wasm_bg.wasm");
+    initExtensionLoader2(wasmExports);
     this.context = new GgsqlContext();
     this.initialized = true;
+  }
+  async installExtension(name, url) {
+    await installExtension2(name, url);
   }
   getContext() {
     if (!this.context) {
@@ -298672,7 +299122,7 @@ var GEOM_LINKS = {
   path: { url: "syntax/layer/type/path", label: "path layer" },
   bar: { url: "syntax/layer/type/bar", label: "bar layer" },
   area: { url: "syntax/layer/type/area", label: "area layer" },
-  rect: { url: "syntax/layer/type/rect", label: "rect layer" },
+  tile: { url: "syntax/layer/type/tile", label: "tile layer" },
   polygon: { url: "syntax/layer/type/polygon", label: "polygon layer" },
   ribbon: { url: "syntax/layer/type/ribbon", label: "ribbon layer" },
   histogram: { url: "syntax/layer/type/histogram", label: "histogram layer" },
@@ -298684,7 +299134,7 @@ var GEOM_LINKS = {
   segment: { url: "syntax/layer/type/segment", label: "segment layer" },
   rule: { url: "syntax/layer/type/rule", label: "rule layer" },
   linear: { url: "syntax/layer/type/linear", label: "linear layer" },
-  errorbar: { url: "syntax/layer/type/errorbar", label: "errorbar layer" }
+  range: { url: "syntax/layer/type/range", label: "range layer" }
 };
 var COORD_LINKS = {
   cartesian: { url: "syntax/coord/cartesian", label: "cartesian coordinates" },
@@ -298768,7 +299218,7 @@ var POSITION_LINKS = {
   }
 };
 var CLAUSE_RE = /\b(VISUALISE|VISUALIZE|DRAW|PLACE|SCALE|FACET|PROJECT|LABEL)\b/gi;
-var GEOM_RE = /\b(?:DRAW|PLACE)\s+(point|line|path|bar|area|rect|polygon|ribbon|histogram|density|smooth|boxplot|violin|text|segment|rule|linear|errorbar)\b/gi;
+var GEOM_RE = /\b(?:DRAW|PLACE)\s+(point|line|path|bar|area|tile|polygon|ribbon|histogram|density|smooth|boxplot|violin|text|segment|rule|linear|range)\b/gi;
 var COORD_RE = /\bTO\s+(cartesian|polar)\b/gi;
 var SCALE_TYPE_RE = /\bSCALE\s+(CONTINUOUS|DISCRETE|BINNED|ORDINAL|IDENTITY)\b/gi;
 var AESTHETIC_AFTER_AS_RE = /\bAS\s+(x|y|xmin|xmax|ymin|ymax|xend|yend|color|colour|fill|stroke|opacity|size|shape|linetype|linewidth|panel|row|column)\b/gi;
@@ -298868,7 +299318,7 @@ async function initTextMateGrammar() {
   const onigWasm = await fetch(WASM_BASE + "onig.wasm");
   const onigBuffer = await onigWasm.arrayBuffer();
   await (0, import_vscode_oniguruma.loadWASM)(onigBuffer);
-  const registry = new import_vscode_textmate.Registry({
+  const registry2 = new import_vscode_textmate.Registry({
     onigLib: Promise.resolve({
       createOnigScanner: import_vscode_oniguruma.createOnigScanner,
       createOnigString: import_vscode_oniguruma.createOnigString
@@ -298882,7 +299332,7 @@ async function initTextMateGrammar() {
       return null;
     }
   });
-  return registry.loadGrammar("source.ggsql");
+  return registry2.loadGrammar("source.ggsql");
 }
 function getGrammar() {
   if (!grammarPromise) {
@@ -299036,6 +299486,27 @@ function rewriteCsvRefs(query) {
     (_match, name) => ` ${name}`
   );
 }
+var INSTALL_SPATIAL_RE = /^\s*INSTALL\s+spatial\s*;/im;
+var spatialInstall = null;
+function ensureSpatialExtension(ctx) {
+  if (!spatialInstall) {
+    console.log("[ggsql-quarto] Installing spatial extension\u2026");
+    spatialInstall = ctx.installExtension("mod_spatialite", WASM_BASE + "mod_spatialite.wasm").catch((e3) => {
+      spatialInstall = null;
+      throw e3;
+    });
+  }
+  return spatialInstall;
+}
+async function installRequestedExtensions(ctx, query) {
+  if (INSTALL_SPATIAL_RE.test(query)) {
+    try {
+      await ensureSpatialExtension(ctx);
+    } catch (e3) {
+      console.error("[ggsql-quarto] Spatial extension install failed:", e3);
+    }
+  }
+}
 var VEGA_EMBED_OPTS = {
   actions: { export: true, source: false, compiled: false, editor: false },
   renderer: "svg"
@@ -299061,9 +299532,12 @@ function gatherCells() {
       const visCandidates = outputDiv.querySelectorAll(
         'div[id^="vis-"]'
       );
-      if (visCandidates.length > 0) {
-        visContainer = visCandidates[0];
-        visId = visContainer.id;
+      const match3 = Array.from(visCandidates).find(
+        (el) => /^vis-\d+$/.test(el.id)
+      );
+      if (match3) {
+        visContainer = match3;
+        visId = match3.id;
       }
     }
     cells.push({
@@ -299118,6 +299592,7 @@ async function initAndExecute(cells) {
   console.log(`[ggsql-quarto] Executing ${total} cells\u2026`);
   for (let i2 = 0; i2 < total; i2++) {
     const cell2 = cells[i2];
+    await installRequestedExtensions(ctx, cell2.query);
     try {
       if (ctx.hasVisual(cell2.rewrittenQuery)) {
         cell2.result = ctx.execute(cell2.rewrittenQuery);
@@ -299148,6 +299623,12 @@ async function applyEditors(cells, ctx) {
     wrapper.className = "ggsql-editor-wrapper";
     const editorContainer = document.createElement("div");
     editorContainer.className = "ggsql-editor-container";
+    const watermark = document.createElement("img");
+    watermark.className = "ggsql-editor-watermark";
+    watermark.src = SITE_ROOT + "assets/icon.svg";
+    watermark.alt = "";
+    watermark.setAttribute("aria-hidden", "true");
+    editorContainer.appendChild(watermark);
     wrapper.appendChild(editorContainer);
     const errorDisplay = document.createElement("div");
     errorDisplay.className = "ggsql-error-display";
@@ -299209,6 +299690,7 @@ function showError(cell2, message) {
 async function executeCell(cell2, editorInst, ctx) {
   clearError(cell2);
   const currentQuery = rewriteCsvRefs(editorInst.getValue());
+  await installRequestedExtensions(ctx, currentQuery);
   try {
     if (ctx.hasVisual(currentQuery)) {
       const result = ctx.execute(currentQuery);

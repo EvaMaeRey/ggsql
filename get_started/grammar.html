@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.0">
+<meta name="generator" content="quarto-1.10.11">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -33,6 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../get_started/anatomy.html" rel="next">
 <link href="../get_started/first_plot.html" rel="prev">
 <link href="../assets/icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -41,14 +42,18 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d2f5d0f7a968084ece60085bbefa17cc.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d2f5d0f7a968084ece60085bbefa17cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d2f5d0f7a968084ece60085bbefa17cc.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-92feeb05dd43c69ab75e34b836a22b2a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-92feeb05dd43c69ab75e34b836a22b2a.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-92feeb05dd43c69ab75e34b836a22b2a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ae3a23e5fff51768ec3dc754f784de44.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-bb8758b6ba4144100911e1d00292335d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-ae3a23e5fff51768ec3dc754f784de44.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-0635d879ab45f52e9bb9ab2a19e4e3eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-d0ba2b2515835955e4f1b35f884c9b02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-0635d879ab45f52e9bb9ab2a19e4e3eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/iconify-3.0.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,20 +87,14 @@ ul.task-list li input[type="checkbox"] {
 
 <meta property="og:title" content="The grammar of graphics – ggsql">
 <meta property="og:description" content="The home of ggsql. A declarative visualisation language build on top of SQL and the grammar of graphics.">
-<meta property="og:image" content="https://ggsql.org/get_started/assets/logo.png">
+<meta property="og:image" content="https://ggsql.org/assets/gog.svg">
 <meta property="og:site_name" content="ggsql">
-<meta property="og:image:alt" content="The ggsql logo showing a pencil tracing a lineplot with points. The pencil
-handle is made up of the classic database silo icon and is coloured in a
-gradient teal.
-">
+<meta property="og:image:alt" content="A schematic showing the components of the grammar of graphics as stacked squares, with their name to the side. The components are: Data, Mappings, Statistics, Scales, Geometries, Facets, Coordinates, and Theme">
 <meta name="twitter:title" content="The grammar of graphics – ggsql">
 <meta name="twitter:description" content="The home of ggsql. A declarative visualisation language build on top of SQL and the grammar of graphics.">
-<meta name="twitter:image" content="https://ggsql.org/get_started/assets/logo.png">
+<meta name="twitter:image" content="https://ggsql.org/assets/gog.svg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image:alt" content="The ggsql logo showing a pencil tracing a lineplot with points. The pencil
-handle is made up of the classic database silo icon and is coloured in a
-gradient teal.
-">
+<meta name="twitter:image:alt" content="A schematic showing the components of the grammar of graphics as stacked squares, with their name to the side. The components are: Data, Mappings, Statistics, Scales, Geometries, Facets, Coordinates, and Theme">
 </head>
 
 <body class="nav-sidebar floating nav-fixed fullcontent quarto-light">
@@ -171,11 +170,40 @@ gradient teal.
     <a class="nav-link" href="../faq.html"> 
 <span class="menu-text">FAQ</span></a>
   </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-news" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">News</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-news">    
+        <li class="dropdown-header">Releases</li>
+        <li>
+    <a class="dropdown-item" href="../blog/posts/2026_04_29_ggsql_0_3_0/index.html">
+ <span class="dropdown-text">Version 0.3.0 (alpha)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://opensource.posit.co/blog/2026-04-20_ggsql_alpha_release/">
+ <span class="dropdown-text">Version 0.2.7 (alpha)</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li>
+    <a class="dropdown-item" href="../CHANGELOG.html">
+ <span class="dropdown-text">CHANGELOG</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../wasm/index.html"> 
 <span class="menu-text">Playground</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="http://python.ggsql.org"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa7-brands:python" style="font-size: 1.5em;" aria-label="link to Python bindings" title="Python bindings"></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://r.ggsql.org"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa7-brands:r-project" style="font-size: 1.5em;" aria-label="link to R bindings" title="R bindings"></iconify-icon></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -184,12 +212,12 @@ gradient teal.
       <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-github"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
           <li>
-            <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/ggsql-dev/ggsql">
+            <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/posit-dev/ggsql">
             Source Code
             </a>
           </li>
           <li>
-            <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/ggsql-dev/ggsql/issues">
+            <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/posit-dev/ggsql/issues">
             Report a Bug
             </a>
           </li>
@@ -208,8 +236,8 @@ gradient teal.
         </a>
     </div>
   </nav>
-  <div id="quarto-announcement" data-announcement-id="5ba53bd994f13c27f80364dba6b56481" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
-<p>ggsql is still in early development and all functionality are subject to change</p>
+  <div id="quarto-announcement" data-announcement-id="b6882ac76ff276df5c5b9efee9fd644c" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p>ggsql is still in early development and all functionality is subject to change. Read the <a href="https://opensource.posit.co/blog/2026-04-20_ggsql_alpha_release/">alpha-release announcement</a></p>
 </div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
 </header>
 <!-- content -->
@@ -234,6 +262,77 @@ gradient teal.
   <div class="sidebar-item-container"> 
   <a href="../get_started/grammar.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Grammar of graphics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/anatomy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Anatomy of ggsql</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tooling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/positron-vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Positron / VS Code</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/jupyter-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter &amp; Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CLI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/tooling/webassembly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WebAssembly</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/the_rest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The rest of the owl</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get_started/wrap_up.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Wrap up</span></a>
   </div>
 </li>
     </ul>
@@ -264,9 +363,23 @@ gradient teal.
 </header>
 
 
-<p>ggsql is a tool for visualising data, combining our 20 years of experience developing <a href="https://ggplot2.tidyverse.org/">ggplot2</a> with a SQL-native syntax. Unlike most visualisation systems, ggsql has an underlying grammar, based on the <a href="https://en.wikipedia.org/wiki/Wilkinson%27s_Grammar_of_Graphics">Grammar of Graphics</a> by Leland Wilkinson. This is a different approach than the one taken by most tools, which give you a set of pre-defined graphics, like scatterplots, bar charts, and pie charts. ggsql instead gives you a number of independent components that you can combine to solve a very wide set of problems.</p>
-<p>This means there’s a learning curve to ggsql: you have to learn a few big ideas about the grammar before you can be productive. But we believe the payoff is worth it. The grammar gives you new vocabulary and new ways to think about visualizations. This allows you to create not only familiar graphics but also newer, better graphics. You’ll gain the ability to look at a visualization that someone else has made, analyse the key components, then recreate it yourself. The hardest part of learning ggsql is likely to be unlearning the preconceptions that you bring over from previous visualization tools.</p>
+<p>ggsql is a tool for visualising data, combining our 20 years of experience developing <a href="https://ggplot2.tidyverse.org/">ggplot2</a> with a SQL-native syntax. Unlike most visualisation systems, ggsql has an underlying grammar, based on the <a href="https://en.wikipedia.org/wiki/Wilkinson%27s_Grammar_of_Graphics">Grammar of Graphics</a> by Leland Wilkinson. This is a different approach than the one taken by most tools, which give you a set of pre-defined graphics, like scatterplots, bar charts, and pie charts. ggsql instead gives you a number of independent components that you can combine to solve a very wide set of problems:</p>
+<p><a href="../assets/gog.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../assets/gog.svg" class="img-fluid" alt="A schematic showing the components of the grammar of graphics as stacked squares, with their name to the side. The components are: Data, Mappings, Statistics, Scales, Geometries, Facets, Coordinates, and Theme"></a></p>
+<div class="gog-list">
+<ul>
+<li><strong>Data</strong> Is the raw data that the plot is representing. Its in tabular format with variables as columns and observations as rows.</li>
+<li><strong>Mappings</strong> Relate the columns in data to visual properties of the plot, called <em>aesthetics</em>.</li>
+<li><strong>Statistics</strong> Optionally transforms the raw data before being used for plotting, e.g.&nbsp;by binning and counting it in a histogram.</li>
+<li><strong>Scales</strong> Transforms the mapped data into values that are meaningful to the visual properties, e.g.&nbsp;by converting a column of text strings into a column of color values if it has been mapped to the fill color</li>
+<li><strong>Geometries</strong> Define the visual representation of the data in the plot, e.g.&nbsp;lines, points, bars, etc.</li>
+<li><strong>Facets</strong> Describe an optional subdivision of the input data, resulting in multiple plots of the same specification, all showing different subsets of the data.</li>
+<li><strong>Coordinates</strong> Define how the position aesthetics (e.g.&nbsp;x and y) are converted into locations on paper or on the screen.</li>
+<li><strong>Theme</strong> Handles all non-data-related styling of the plot, e.g.&nbsp;background color, title fonts, margins etc.</li>
+</ul>
+</div>
+<p>While all of this provides structure it also means that there may be a learning curve to ggsql: you have to learn a few big ideas about the grammar before you can be productive. But we believe the payoff is worth it. The grammar gives you new vocabulary and new ways to think about visualizations. This allows you to create not only familiar graphics but also newer, better graphics. You’ll gain the ability to look at a visualization that someone else has made, analyse the key components, then recreate it yourself. The hardest part of learning ggsql is likely to be unlearning the preconceptions that you bring over from previous visualization tools.</p>
 <p>We’ve tried to make the learning curve as easy as possible by keeping the grammar close to the SQL syntax that you’re already familiar with. You’ll start with a classic <code>SELECT</code> statement to get the data that you want. Then you’ll use <code>VISUALIZE</code> (or <code>VISUALISE</code> 🇬🇧) to switch from creating a table of data to creating a plot of that data. Then you’ll <code>DRAW</code> a layer that maps columns in your data to aesthetics (visual properties), like position, colour, and shape. Then you tweak the <code>SCALE</code>s, the mappings between the data and the visual properties, to make the plot easier to read. Then you <code>FACET</code> the plot to show how the relationships differ across subsets of the data. Finally you finish up by adding <code>LABEL</code>s to explain your plot to others. This allows you to produce graphics using the same structured thinking that you already use to design a SQL query.</p>
+<p>In the end of this tutorial we will revisit the duality of the syntax and the grammar and also provide a <a href="../get_started/wrap_up.html#from-grammar-to-syntax">handy table</a> that shows how they relate to each other.</p>
 
 
 
@@ -678,6 +791,9 @@ gradient teal.
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../get_started/anatomy.html" class="pagination-link" aria-label="Anatomy of ggsql">
+        <span class="nav-page-text">Anatomy of ggsql</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -690,6 +806,38 @@ gradient teal.
   document.head.appendChild(link);
   import(base + 'quarto.js');
 </script>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
